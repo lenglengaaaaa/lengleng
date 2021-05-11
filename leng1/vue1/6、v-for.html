@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+        .box{width:100px;height:100px;background:red}
+        .v-enter{opacity:0}
+        .v-enter-to{opacity:1}
+        .v-enter-active{transition:all 3s}
+        .v-leave{opacity:1}
+        .v-leave-to{opacity:0}
+        .v-leave-active{transition:all 3s}
+    </style>
+</head>
+<body>
+    <!-- 
+        v-for的注意点：
+        v-for为了提升性能，在更新已渲染过的元素列表时，会采用“就地复用策略 ”
+        也就是因为这个策略，在某些时刻会导致我们的数据混乱
+        例如：在列表前面新增了内容
+            为了解决这个问题，我们可以在渲染列表时给每一个元素加上一个独一无二的key
+            v-for在更新已渲染过的元素列表时，会先判断key是否相同，如果相同则复用，不同则重新创建
+
+        key属性注意点
+            不能使用index的作为key，因为当列表的内容新增或者删除时index都会发生变化
+            这就导致了不能很好的复用没有发生改变的元素，大大降低了渲染的效率
+     -->
+
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <form action="">
+            <input type="text" v-model="name">
+            <input type="submit" value="添加" @click.prevent="add">
+        </form>
+        <transition-group appear tag="ul">
+            <li v-for="(person,index) in persons" :key="person.id" @click="del(index)">
+                <input type="checkbox">
+                <span>{{index}}---{{person.name}}</span>
+            </li>
+        </transition-group>
+    </div>
+
+    <script>
+
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+                persons:[
+                    {name:'zs',id:1},
+                    {name:'ls',id:2},
+                    {name:'ww',id:3},
+                ],
+                name:"",
+                id:3
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+                add(){
+                    this.id++;
+                    let lastPerson=this.persons[this.persons.length-1]
+                    let newPerson ={name:this.name,id:this.id};
+                    // this.persons.push(newPerson);
+                    this.persons.unshift(newPerson)
+                    this.name="";
+                },
+                del(index){
+                    this.persons.splice(index,1);
+                }
+            }
+        })
+    </script>
+</body>
+</html>

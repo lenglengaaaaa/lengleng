@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <p v-cloak>{{ name }}</p>
+        <p v-once>原始数据 {{ name }}</p>
+        <input type="text" v-model='msg'>
+
+    </div>
+
+    <!-- 
+        <div id="app">
+            <p>leng</p>
+
+        </div>
+
+     -->
+    
+    <script src="../js/vue.js"></script>
+    <script>
+        /**
+         * 1.什么是指令
+         * 
+         * 
+         * 指令v-model  实现数据的双向传递
+         * 指令v-once   让界面不要跟着数据变化而变化，只渲染一次
+         * 指令v-cloak  配合[v-cloak]:{display:none}默认先隐藏未渲染的界面
+        */
+
+        let vue = new Vue({
+            el :'#app',
+            data:{
+                name:'leng',
+                msg:'to leng'
+            }
+        })
+    </script>
+</body>
+</html>

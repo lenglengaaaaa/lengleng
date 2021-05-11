@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <p>{{msg}}</p>
+    </div>
+
+    <script>
+        /**
+         * 1、什么是生命周期方法
+         *      和wabpack生命周期一样，都是从生到死的特定阶段调用的方法
+         *      ps: 生命周期钩子=生命周期函数=生命周期事件
+         * 
+         * 2、vue生命周期方法分类
+         *      2.1、创建期间的生命周期方法
+         *          beforeCreate
+         *          created
+         *          beforeMount
+         *          mounted
+         *      2.2、运行期间的生命周期方法
+         *          beforeUpdate
+         *          updated
+         *      2.3、销毁期间的生命周期方法
+         *          beforeDestroy
+         *          destroyed
+         * 
+        */
+
+        let vue = new Vue({
+            beforeCreate:function(){
+                /**
+                 * 在调用 beforeCreate 的时候，仅仅表示vue刚刚被创建出来
+                 * 此时还没有初始化好vue实例中的数据和方法，所以此时还不能访问vue实例中保存的数据和方法
+                 * 
+                */
+                console.log(this.msg);
+                console.log(this.say);
+            },
+            created:function(){
+                /**
+                 * 在调用create的时候是最早能够访问vue实例中保存的数据和方法
+                */
+                console.log(this.msg);
+                console.log(this.say);
+            },
+            beforeMount:function(){
+                /**
+                 * 仅仅完成了模板的编译，还没有挂载到页面中，则页面原始内容还没有被替换
+                */
+                console.log(document.querySelector("p").innerHTML); //打印出来的就是{{msg}}，还没有替换成 leng
+                console.log(document.querySelector("p").innerText); //打印出来的就是{{msg}}，还没有替换成 leng
+
+            },
+            mounted:function(){
+                /**
+                 * 在调用mounted的时候，表示vue已经完成了模板的渲染，表示我们可以拿到界面上渲染之后的内容了
+                */
+                console.log(document.querySelector("p").innerHTML); //打印出来的是 leng
+                console.log(document.querySelector("p").innerText); //打印出来的是 leng
+            },
+            el :'#app',
+            // 这里就是mvvm中的model
+            data:{
+                msg:"leng",
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+                say(){
+                    console.log("say");
+                }
+            },
+            // 专门用于定义计算属性的
+            computed:{
+
+            },
+            // 专门用于定义局部组件的
+            components:{
+                
+            }
+        })
+    </script>
+</body>
+</html>

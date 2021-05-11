@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <!-- Vue会把name交给指定的过滤器处理之后，再把处理之后的结果插入到指定的元素中 -->
+        <p>{{name | formarStr}}</p>
+        <p>{{name | formarStr | formarStr2}}</p>
+        <p>{{time | dateFormart}}</p>
+        <p>{{time | dateFormart("yyyy-MM-dd")}}</p>
+    </div>
+
+    <script>
+        /**
+         * 1、什么是过滤器？
+         *      过滤器和函数和计算属性一样都是用来处理数据的
+         *      但是过滤器一般用于格式化插入的文本数据
+         * 
+         * 2、如何自定义全局过滤器
+         *      Vue.filter("过滤器名称",过滤器处理函数)
+         * 
+         * 3、如何使用全局过滤器
+         *      {{msg | 过滤器名称}}
+         *      :value="mag | 过滤器名称"
+         * 
+         * 4、过滤器注意点
+         *      1、只能在插值语法和v-bind中使用
+         *      2、过滤器可以连续使用
+        */
+
+        /**
+         * 如何自定义一个全局过滤器
+         *      通过Vue.filter();
+         *      filter方法接收两个参数
+         *      第一个参数：过滤器名称
+         *      第二个参数：处理数据的函数
+         *      注意点：默认情况下处理数据的函数接收一个参数，就是当前要被处理的数据
+        */
+
+        /**
+         * 如何定义一个局部过滤器的特点
+         *      只能在自定义的那个Vue实例中使用
+         *      filters:{
+         *          //key: 过滤器名称
+         *          //value: 过滤器处理函数
+         *          "formarStr":function(value){}
+         *      }
+         * 
+        */
+        Vue.filter("formarStr",function(value){
+            value=value.replace(/你妹的/g,"你好");
+            return value
+        });
+        Vue.filter("formarStr2",function(value){
+            value=value.replace(/你好/g,"不好");
+            return value
+        });
+
+        Vue.filter("dateFormart",function(value,fmStr){
+            let date = new Date(value);
+            let year = date.getFullYear();
+            let month = date.getMonth()+1+"";
+            let day = date.getDate()+"";
+            let hour = date.getHours()+"";
+            let minute = date.getMinutes()+"";
+            let second = date.getSeconds()+"";
+            if(fmStr && fmStr=== "yyyy-MM-dd"){
+                return `${year}-${month.padStart(2,"0")}-${day.padStart(2,"0")}`
+            }
+            return `${year}-${month.padStart(2,"0")}-${day.padStart(2,"0")} ${hour.padStart(2,"0")}:${minute.padStart(2,"0")}:${second.padStart(2,"0")}`
+        })
+
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+                name:'leng你妹的，aaa你妹的，bbb你妹的',
+                time:Date.now()
+            },
+            // 专门用于存储监听事件回调函数
+            methods:{
+            },
+            // 专门用于定义局部过滤器
+            filters:{
+                "formarStr":function(value){
+                    value=value.replace(/你妹的/g,"你好");
+                    return value
+                }
+            }
+        })
+    </script>
+</body>
+</html>

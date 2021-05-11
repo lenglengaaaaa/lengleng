@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <!-- 1、加载vuex -->
+    <script src="../js/vuex.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <grafather></grafather>
+    </div>
+    <template id="grafather">
+        <div>
+            <!-- 4、在使用vuex中保存的共享数据的时候必须通过如下格式来使用 -->
+            <p>{{this.$store.state.msg}}</p>
+            <father></father>
+        </div>    
+    </template>
+    <template id="father">
+        <div>
+            <p>{{this.$store.state.msg}}</p>
+            <son></son>
+        </div>    
+    </template>
+    <template id="son">
+        <div>
+            <p>{{this.$store.state.msg}}</p>
+        </div>
+    </template>
+
+    <script>
+        /**
+         * 什么是vuex？
+         *      vuex是Vue配套的公共数据管理工具，我们可以将共享的数据保存到vuex中，
+         *      方便整个程序中的任何组件都可以获取和修改vuex中保存的公共数据
+         * 
+         * 注意点：
+         *      
+        */
+
+        // 2、创建vuex对象
+        const store = new Vuex.Store({
+            //  这里的state就相当于组件中的data，就是专门保存共享数据的
+            state:{
+                msg:"leng"
+            },
+            // mutations:{
+            //     increment(state){
+            //         state.count++    
+            //     }
+            // }
+        })
+
+        Vue.component("grafather",{
+            template:"#grafather",
+            // 3、在祖先组件中添加store的key保存vuex对象
+            // 只要祖先组件中保存了vuex对象，那么祖先组件和所有后代组件就可以使用vuex中保存的共享数据了
+            store:store,
+            components:{
+                "father":{
+                    template:"#father",
+                    components:{
+                        "son":{
+                            template:"#son"
+                        }
+                    }
+                }
+            }
+        })
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+            }
+        })
+    </script>
+</body>
+</html>

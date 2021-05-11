@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <gra-father></gra-father>
+    </div>
+    <template id="graFather">
+        <div>
+            <p>我是爷爷组件</p>
+            <p>{{name}}</p>
+            <button @click="say">我是按钮</button>
+            <father :gfname="name" @gfsay="say"></father>
+        </div>
+    </template>
+    <template id="father">
+        <div>
+            <p>我是父组件</p>
+            <p>{{gfname}}</p>
+            <button @click="fatherFn">我是按钮</button>
+            <son :fname="gfname" @fsay="fatherFn"></son>
+        </div>
+    </template>
+    <template id="son">
+        <div>
+            <p>我是子组件</p>
+            <p>{{fname}}</p>
+            <button @click="sonFn">我是按钮</button>
+        </div>
+    </template>
+    <script>
+        /**
+         * 如何将子组件数据传递给父组件
+         *  调用方法的时候传递参数，传递的参数就是我们需要传递的数据
+        */
+
+        // Vue.component("father",{
+        //     template:"#father",
+        //     components:{
+        //         "son":{
+        //             template:"#son"
+        //         }
+        //     }
+        // })
+
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+            },
+            //专门用于定义局部组件的
+            components:{
+                "graFather":{
+                    template:"#graFather",
+                    data:function(){
+                        return{
+                            name:"leng",
+                        }
+                    },
+                    methods:{
+                        say(){
+                            console.log("我是爷爷的方法");
+                        }
+                    },
+                    components:{
+                        "father":{
+                            template:"#father",
+                            props:["gfname"],
+                            methods:{
+                                fatherFn(){
+                                    this.$emit("gfsay")
+                                }
+                            },
+                            data:function(){
+                                return{
+                                }
+                            },
+                            components:{
+                                "son":{
+                                    template:"#son",
+                                    props:["fname"],
+                                    methods:{
+                                        sonFn(){
+                                            this.$emit("fsay")
+                                        }
+                                    },
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

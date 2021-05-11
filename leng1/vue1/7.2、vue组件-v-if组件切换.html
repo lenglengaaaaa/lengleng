@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <button @click="toggle">切换</button>
+        <!-- <p v-if="isShow">我是首页</p>
+        <img v-else src="../img/img1.png" alt=""> -->
+        <!-- 3、使用注册好的组件 -->
+        <home v-if="isShow"></home>
+        <photo v-else></photo>
+    </div>
+    <template id="home">
+        <div>
+            <p>我是首页</p>
+        </div>
+    </template>
+    <template id="photo">
+        <div>        
+            <img src="../img/img1.png" alt="">
+        </div>
+    </template>
+    <script>
+        /**
+         * Vue两大核心：
+         *      数据驱动界面改变
+         *      组件化
+         * 1、什么是组件化
+         *      在前端开发中组件就是把一个很大的界面拆分为多个小界面，每一个小界面就是一个组件
+         *      将大界面拆分成小界面就是组件化
+         * 2、组件化的好处
+         *      可以简化Vue实例代码
+         *      可以提高复用性
+         * 
+         * 3、Vue中如何创建组件
+         *      1-创建组件构造器
+         *      2-注册已经创建好的组件
+         *      3-使用注册好的组件
+        */
+
+
+        // 1-创建组件构造器
+
+        /* 2-注册已经创建好的组件
+        第一个参数：指定注册的组件名称
+        第二个参数：传入已经创建好的组件构造器 */
+
+        // 自定义全局组件
+        Vue.component("home",{
+            template:"#home",
+            methods:{
+
+            },
+            // 组件中data必须是一个函数，和Vue实例中不一样，这样写会报错
+            // data:{
+            //     abcMsg:"bbb"
+            // }
+            // 组件中的data如果不是通过函数返回的，那么多个组件就会公用一份数据，就会导致数据混乱
+            data:function(){
+                return{
+                }
+            }
+        })
+        Vue.component("photo",{
+            template:"#photo",
+            methods:{
+
+            },
+            // 组件中data必须是一个函数，和Vue实例中不一样，这样写会报错
+            // data:{
+            //     abcMsg:"bbb"
+            // }
+            // 组件中的data如果不是通过函数返回的，那么多个组件就会公用一份数据，就会导致数据混乱
+            data:function(){
+                return{
+                }
+            }
+        })
+
+
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+                isShow:true,
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+                toggle(){
+                    this.isShow = !this.isShow;
+                }
+            },
+            //专门用于定义计算属性的
+            computed:{
+
+            }
+        })
+    </script>
+</body>
+</html>

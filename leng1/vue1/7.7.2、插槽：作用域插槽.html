@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <father></father>
+    </div>
+    <template id="father">
+        <div>
+            <son>
+                <!-- <div>我是填充的内容{{names}}</div> -->
+                <!-- 
+                    slot-scope="abc" ：接收子组件插槽暴露的数据
+                 -->
+                <template slot-scope="abc">
+                    <!-- <div>我是填充的内容{{abc.names}}</div> -->
+                    <li v-for="(name,index) in abc.names">{{name}}</li>
+                </template>
+            </son>
+        </div>
+    </template>
+    <template id="son">
+        <div>
+            <div>我是底部</div>
+            <!-- 
+                v-bind:names="names" 作用：将当前子组件的names数据暴露给父组件
+             -->
+            <slot v-bind:names="names">我是默认内容{{names}}</slot>
+            <div>我是头部</div>
+        </div>
+    </template>
+    <script>
+        /**
+         * 作用域插槽的应用场景：子组件提供数据，父组件决定如何渲染
+         *  
+        */
+
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+            },
+            //专门用于定义局部组件的
+            components:{
+                "father":{
+                    template:"#father",
+                    methods:{
+                    },
+                    data:function(){
+                        return{
+                        }
+                    },
+                    components:{
+                        "son":{
+                            template:"#son",
+                            data:function(){
+                                return{
+                                    names:['zs','ls','ww']
+                                }
+                            },
+                            methods:{
+                            },
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>
