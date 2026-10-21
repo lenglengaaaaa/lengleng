@@ -1,0 +1,1 @@
+App({ globalData: { selectedDigest: '', selectedBatchId: '' } })

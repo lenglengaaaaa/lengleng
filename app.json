@@ -1,0 +1,35 @@
+{
+    "pages":  [
+                  "pages/index/index",
+                  "pages/category/category",
+                  "pages/search/search"
+              ],
+    "window":  {
+                   "navigationBarTextStyle":  "black",
+                   "navigationStyle":  "custom",
+                   "backgroundColor":  "#f5f6fa"
+               },
+    "tabBar":  {
+                   "color":  "#9aa0aa",
+                   "selectedColor":  "#4f6ef7",
+                   "backgroundColor":  "#ffffff",
+                   "borderStyle":  "white",
+                   "list":  [
+                                {
+                                    "pagePath":  "pages/index/index",
+                                    "text":  "首页"
+                                },
+                                {
+                                    "pagePath":  "pages/category/category",
+                                    "text":  "重复照片"
+                                },
+                                {
+                                    "pagePath":  "pages/search/search",
+                                    "text":  "照片库"
+                                }
+                            ]
+               },
+    "style":  "v2",
+    "sitemapLocation":  "sitemap.json",
+    "lazyCodeLoading":  "requiredComponents"
+}

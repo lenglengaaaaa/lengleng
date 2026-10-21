@@ -1,0 +1,11 @@
+﻿# WeChat Mini Program local and generated files
+node_modules/
+.DS_Store
+*.log
+
+# WeChat Developer Tools local settings
+project.private.config.json
+
+# OS/editor files
+.vscode/
+.idea/

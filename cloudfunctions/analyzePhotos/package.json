@@ -1,0 +1,9 @@
+{
+  "name": "analyze-photos",
+  "version": "1.0.0",
+  "description": "AI照片整理助手云函数入口",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "latest"
+  }
+}
