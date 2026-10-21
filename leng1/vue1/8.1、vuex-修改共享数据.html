@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vuex.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <father></father>
+    </div>
+    <template id="father">
+        <div>
+            <son1></son1>
+            <son2></son2>
+        </div>    
+    </template>
+    <template id="son1">
+        <div>
+            <button @click="add">增加</button>
+            <button @click="sub">减少</button>
+            <input type="text" :value="this.$store.state.count">
+        </div>
+    </template>
+    <template id="son2">
+        <div>
+            <p>{{this.$store.state.count}}</p>
+        </div>
+    </template>
+    <script>
+        const store=new Vuex.Store({
+            // 用于保存共享数据
+            state:{
+                count:0,
+            },
+            // 用于保存修改共享数据的方法
+            mutations:{
+                /* 注意点：在执行mutations中定义的方法的时候，系统会自动给这些方法传递一个state参数
+                        state中就保存了共享数据 */
+                mAdd(state){
+                    state.count=state.count+1;
+                },
+                mSub(state){
+                    state.count=state.count-1;
+                },
+            }
+        })
+
+        Vue.component("father",{
+            template:"#father",
+            store:store,
+            methods:{
+            },
+            components:{
+                "son1":{
+                    template:"#son1",
+                    methods:{
+                        /**
+                         * 注意点：在Vuex中不推荐直接修改共享数据
+                         * 如果多个组件都修改了共享数据，后续数据发生错误我们需要把每一个修改了共享数据的组件都检查一遍
+                         * 解决方案是直接在vuex里面新增一个 mutations 属性
+                        */
+                        add(){
+                            // this.$store.state.count=this.$store.state.count+1;
+                            this.$store.commit("mAdd")
+                        },
+                        sub(){
+                            // this.$store.state.count=this.$store.state.count-1;
+                            this.$store.commit("mSub")
+                        }
+                    }
+                },
+                "son2":{
+                    template:"#son2",
+                    methods:{
+                        /**
+                         * 注意点：在Vuex中不推荐直接修改共享数据
+                         * 如果多个组件都修改了共享数据，后续数据发生错误我们需要把每一个修改了共享数据的组件都检查一遍
+                         * 解决方案是直接在vuex里面新增一个 mutations 属性
+                        */
+                        add(){
+                            // this.$store.state.count=this.$store.state.count+1;
+                            this.$store.commit("mAdd")
+                        },
+                        sub(){
+                            // this.$store.state.count=this.$store.state.count-1;
+                            this.$store.commit("mSub")
+                        }
+                    }
+                }
+            }
+        })
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+            }
+        })
+    </script>
+</body>
+</html>

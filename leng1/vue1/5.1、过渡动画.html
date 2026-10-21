@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+        .box{width:100px;height:100px;background:red}
+        .one-enter{opacity:0}
+        .one-enter-to{opacity:1;margin-left:100px;}
+        .one-enter-active{transition:all 3s}
+        .one-leave{opacity:1}
+        .one-leave-to{opacity:0}
+        .one-leave-active{transition:all 3s}
+        .two-enter{opacity:0}
+        .two-enter-to{opacity:1;margin-top:100px}
+        .two-enter-active{transition:all 3s}
+        .two-leave{opacity:1}
+        .two-leave-to{opacity:0}
+        .two-leave-active{transition:all 3s}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <button @click="toggle">我是按钮</button>
+        <!-- appear属性是网页一打开就用动画效果 -->
+        <transition appear name="one">
+            <div class="box" v-show="isShow"></div>
+        </transition>
+        <transition appear name="two">
+            <div class="box" v-show="isShow"></div>
+        </transition>
+    </div>
+
+    <script>
+        /**
+         * 过渡动画
+         * 1、将需要执行动画的元素放到transition组件中
+         * 2、当transition组件中的元素显示时会自动查找.v-enter/.v-enter-active/.v-enter-tp类名
+         *      当transition组件中的元素隐藏时会自动查找.v-leave/.v-leave-active/.v-leave-to类名
+         * 3、我们只需要在.v-enter和.v-leave-to中指定动画开始的状态
+         *             在.v-enter-active和.v-leave-active中指定动画执行的状态
+         *             即可完成过渡动画
+        */
+
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+                isShow:true
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+                toggle(){
+                    this.isShow=!this.isShow;
+                }
+            }
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <script src="../js/vuex.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <father></father>
+    </div>
+    <template id="father">
+        <div>
+            {{this.$store.getters.formart}}
+            {{this.$store.getters.formart}}
+        </div>    
+    </template>
+    <template id="son">
+        <div>value="this.$store.state.count">
+        </div>
+    </template>
+    <script>
+        const store=new Vuex.Store({
+            // 用于保存共享数据
+            state:{
+                msg:"leng"
+            },
+            // 用于保存修改共享数据的方法
+            mutations:{
+            },
+            getters:{
+                formart(state){
+                    console.log("该方法被执行了");
+                    return state.msg+"www"
+                }
+            }
+        })
+
+        Vue.component("father",{
+            template:"#father",
+            store:store,
+            methods:{
+            },
+            components:{
+                "son":{
+                    template:"#son",
+                    methods:{
+                    }
+                },
+            }
+        })
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+            }
+        })
+    </script>
+</body>
+</html>

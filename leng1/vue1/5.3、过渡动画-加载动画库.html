@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+        .box{width:100px;height:100px;background:red}
+        /* .v-enter{opacity:0}
+        .v-enter-to{opacity:1}
+        .v-enter-active{transition:all 3s}
+        .v-leave{opacity:1}
+        .v-leave-to{opacity:0}
+        .v-leave-active{transition:all 3s} */
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <button @click="toggle">我是按钮</button>
+        <!-- appear 属性是网页一打开就用动画效果 -->
+        <!-- 
+            注意点：虽然我们是通过JS钩子函数来实现过渡动画
+                但是默认Vue还是会回去查找类名，所以为了不让Vue去查找类名
+                可以给transition添加v-bind:css="false"
+         -->
+        <transition appear v-bind:css="false"
+                    v-on:before-enter="beforeEnter"
+                    v-on:enter="enter"
+                    v-on:after-enter="afterEnter">
+            <div class="box" v-show="isShow"></div>
+        </transition>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+    <script>
+        /**
+         * 过渡动画
+         * 1、将需要执行动画的元素放到transition组件中
+         * 2、当transition组件中的元素显示时会自动查找.v-enter/.v-enter-active/.v-enter-tp类名
+         *      当transition组件中的元素隐藏时会自动查找.v-leave/.v-leave-active/.v-leave-to类名
+         * 3、我们只需要在.v-enter和.v-leave-to中指定动画开始的状态
+         *             在.v-enter-active和.v-leave-active中指定动画执行的状态
+         *             即可完成过渡动画
+        */
+
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+                isShow:true
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+                toggle(){
+                    this.isShow=!this.isShow;
+                },
+                beforeEnter(el){
+                    // 进入动画开始之前
+                },
+                // done回调函数
+                enter(el,done){
+                    // 进入动画执行过程中
+                    Velocity(el,{opacity:1,marginLeft:"100px"},3000)
+                    done();
+                },
+                afterEnter(el){
+                    //进入动画执行完毕之后
+                }
+            }
+        })
+    </script>
+</body>
+</html>

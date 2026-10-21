@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <!-- 
+            如果组件里面用的是驼峰命名：
+                例如： Vue.component("myFather",{})
+                那么这里应该是： <my-father></my-father>
+
+         -->
+        <father></father>
+        <father1></father1>
+    </div>
+    <!-- <template id="home">
+        <div>
+            <p>我是首页</p>
+        </div>
+    </template> -->
+
+    <template id="father">
+        <div>
+            <p>我是父组件</p>
+            <p>{{name}}</p>
+            <p>{{age}}</p>
+            <!-- 这里通过 parentName abc 传递给子组件-->
+            
+            <!-- 
+                如果子组件想使用驼峰命名的话
+                那么这里也要改成 :parent-name="name"
+            
+            -->
+            <son :parent-name="name" :abc="age"></son>
+        </div>
+    </template>
+    <template id="son">
+        <div>
+            <p>我是子组件</p>
+            <!-- 这里通过parentName使用了父组件传递过来的数据 -->
+            <p>{{parentName}}</p>
+            <p>{{abc}}</p>
+        </div>
+    </template>
+    <template id="father1">
+        <div>
+            <p>我是父组件</p>
+            <button @click="say">我是按钮</button>
+            <!-- 通过parentSay -->
+            <!-- 
+                如果子组件的方法想使用驼峰命名的话
+                那么这里也要改成 @parent-say="say"
+                与传递数据不同的是，子组件方法引用那里也应改为parent-say，不能用驼峰命名
+            
+            -->
+            <son1 @parent-say="say"></son1>       
+        </div>
+    </template>
+    <template id="son1">
+        <div>
+            <p>我是子组件</p>
+            <button @click="sonFn">我是按钮</button>
+        </div>
+    </template>
+    <script>
+        /**
+         * 什么是父子组件？
+         *  在一个组件中又定义了其他组件就是父子组件
+         *  局部组件就是最简单的父子组件，Vue实例是一个大组件，我们的vue实例中定义了局部组件就相当于在大组件里面定义了小组件，所以局部组件就是最简单的父子组件
+         * 
+         * 如何定义其他父子组件
+         *  前面说过自定义组件中可以使用data，可以使用methods，当然自定义组件中也可以使用components
+         * 所以我们可以在自定义组件中再定义其他组件
+         * 
+         * 父子组件传递数据
+         *  在Vue中子组件是不能访问父组件的数据的
+         *  如果子组件想要访问父组件的数据，必须通过父组件传递  
+         * 
+         * 如果传递
+         *  在父组件中通过v-bind传递数据
+         *      传递格式  v-bind:自定义接收名称="要传递的数据"
+         *  在子组件中通过props接收数据
+         *      接受格式  props:["自定义接收名称"]
+         * 
+         * 父子组件方法传递
+         *  在Vue中子组件是不能访问父组件的方法的
+         *  如果子组件想要访问父组件的方法，必须通过父组件传递
+         * 
+         * 如何传递方法
+         *  在父组件中通过v-on传递方法
+         *      传递格式 v-on:自定义接收名称="要传递方法"
+         *  在父组件中自定义一个方法
+         *      接收格式 this.$emit('自定义接收名称')
+        */
+
+        // Vue.component("father",{
+        //     template:"#father",
+        //     components:{
+        //         "son":{
+        //             template:"#son"
+        //         }
+        //     }
+        // })
+
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+
+            },
+            // 专门用于存储监听事件回调函数 
+            methods:{
+            },
+            //专门用于定义局部组件的
+            components:{
+                // "home":{
+                //     template:"#home"
+                // }
+                "father":{
+                    template:"#father",
+                    methods:{
+
+                    },
+                    data:function(){
+                        return{
+                            name:"leng",
+                            age:18
+                        }
+                    },
+                    components:{
+                        "son":{
+                            template:"#son",
+                            // 这里通过 parentName abc 接收了父组件传递过来的数据
+                            props:["parentName","abc"]
+                        }
+                    }
+                },
+                
+                "father1":{
+                    template:"#father1",
+                    methods:{
+                        say(){
+                            alert('aaa')
+                        }
+                    },
+                    data:function(){
+                        return{
+                        }
+                    },
+                    components:{
+                        "son1":{
+                            template:"#son1",
+                            /**
+                             * 注意点：和传递的数据不同，
+                             *  如果传递的是方法，需要在子组件中自定义一个方法
+                             *  如果传递的是方法，需要在子组件中直接使用自定义方法即可
+                             *  如果传递的是方法，需要在子组件自定义方法中通过
+                             *  this.$emit("自定义接收的名称")的方法来触发父组件传递过来的方法
+                             *  this.$emit("自定义接收的名称")的方法来触发父组件传递过来的方法
+                            */
+                            methods:{
+                                sonFn(){
+                                    this.$emit("parent-say")
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+</html>

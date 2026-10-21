@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="../js/vue.js"></script>
+    <style>
+        *{margin: 0;padding: 0;}
+        .size{font-size: 20px;}
+        .color{color: blue;}
+        .active{background: #000;}
+        .a{width: 300px;height: 300px;background: red;}
+        .b{width: 200px;height: 200px;background: blue;}
+        .c{width: 100px;height: 100px;background: #000;}
+    </style>
+</head>
+<body>
+    <!-- 这里就是mvvm中的view -->
+    <div id="app">
+        <div class="model" style="width: 50%;float: left;">
+            <h1>model模块</h1>
+            <p>{{ name }}</p>
+            <p v-once>原始数据 {{ name }}</p>
+            <p v-cloak>{{ name }}</p>
+            <input type="text" v-model='msg'>
+            <!-- 插值的方式：不会解析html -->
+            <p>++++{{ msg1 }}++++</p>
+            <!-- v-text也不会解析html，v-text和v-html会覆盖原有的html -->
+            <p v-text='msg1'>++++++++</p>
+            <p v-html='msg1'>++++++++</p>
+        </div>
+
+        <!-- v-if -->
+        <div class="v-if" style="width: 50%;float: left;">
+            <h1>v-if</h1>
+            <p v-if='show'>我的true</p>
+            <p v-if='hidden'>我的false</p>
+            <p v-if='true'>我的true</p>
+            <p v-if='false'>我的false</p>
+            <p v-if="age >= 18">我的true</p>
+            <p v-if="age < 18">我的false</p>
+            <p v-if='age < 18'>成年人</p>
+            <p v-else>未成年人</p>
+            <p v-if='score >= 90'>优秀</p>
+            <p v-else-if='score >= 60'>良好</p>
+            <p v-else>差</p>
+        </div>
+
+        <!-- v-show -->
+        <div class="v-show" style="width: 50%;float: left;">
+            <h1>v-show</h1>
+            <p v-show='show'>我的true</p>
+            <p v-show='hidden'>我的false</p>
+            <p v-show='true'>我的true</p>
+            <p v-show='false'>我的false</p>
+        </div>
+
+        <!-- v-for -->
+        <div class="v-for" style="width: 50%;float: left;">
+            <h1>v-for</h1>
+            <ul>
+                <li v-for='(value,index) in list'>{{ index }}---{{ value }}</li>
+                <li v-for='(value,index) in "abcd"'>{{ index }}---{{ value }}</li>
+                <li v-for='(value,index) in 4'>{{ index }}---{{ value }}</li>
+                <li v-for='(value,key) in obj'>{{ key }}---{{ value }}</li>
+            </ul>
+        </div>
+
+
+        <!-- v-bind -->
+        <div class="v-bind" style="width: 50%;float: left;">
+            <h1>v-bind</h1>
+            <!-- <p>{{ name }}</p>
+            <p v-text='name'></p>
+            <p v-html='name'></p> -->
+    
+            <!-- 注意点： 如果要给元素的属性绑定数据，是不能使用插值语法的 -->
+            <input type="text" value='{{name}}' >
+            <!-- 注意点： 虽然通过v-model可以将数据绑定到input标签的value属性上
+                          但是v-model是用局限性的，只能用于input/textarea/select,
+                          但是我们还可能需要给其他标签的属性绑定数据
+            -->
+            <input type="text" v-model='name' >
+            <input type="text" v-bind:value='name' >
+            <input type="text" :value='name' >
+            <input type="text" :value='age + 1' >
+    
+            <!-- 如果需要通过v-bind绑定类名class，不能直接赋值
+                默认情况下v-bind会去model中查找数据，但是model中没有对应的类名，所以无效
+                注意点：如果想让v-bind去style中查找类名，那么就必须把类名放到数组中
+                        但是放到数组中之后默认还是回去model中查找
+                        将类名放到数组中之后，还需要利用引号将类名括起来才会去style中查找
+            -->
+            <p :class="['size','color','active']">直接绑定</p>
+    
+            <!-- 注意点：
+                    如果通过v-bind绑定类名，可以通过三目运算符来实现按需求绑定
+            -->
+            <p :class="['size','color',hidden ? 'active' : '']">通过三目运算绑定</p>
+    
+            <!-- 注意点：
+                    如果通过v-bind绑定类名，可以通过对象来决定是否需要绑定
+                    格式： {'需要绑定的类名' ： 是否绑定}
+            -->
+            <p :class="['size','color',{'active' : true}]">通过对象绑定</p>
+    
+            <!-- 注意点：
+                    如果通过v-bind类绑定类名，可以使用model中的对象来替换数组
+            -->
+            <p :class="classObj">通过model中的对象绑定</p>
+    
+            <!-- v-bind绑定样式:
+                    和绑定类名一样，默认情况下会去model查找
+            -->
+            <p style="color: red;">我是段落</p>
+            <!-- 
+                注意点：
+                    如果样式名称带横线，那么必须用引号括起来 -->
+            <p :style="{color: 'red','font-size':'20px'}">我是段落</p>
+            <p :style="styleObj">我是段落</p>
+            <!-- 注意点：
+                    如果model中保存了多个样式对象，可将多个对象放到数组中赋值给style
+            -->
+            <p :style="[styleObj,styleObj1]">我是段落</p>
+        </div>
+
+        <!-- v-on -->
+        <div class="v-on" style="width: 50%;float: left;">
+            <h1>v-on</h1>
+            <!-- <button onclick="alert('aa')">我是按钮</button> -->
+
+            <!-- 注意点：
+                    1、如果是通过v-on来绑定的监听事件，那么在指定事件名称的时候不需要写on
+                    2、如果是通过v-on来绑定监听事件，那么在赋值的时候必须赋值一个回调函数的名称
+            -->
+            <!-- <button v-on:click="alert('aa')">我是按钮</button> -->
+            <button v-on:click="myFn">我是按钮</button>
+            <button @click="myFn">我是按钮</button>
+
+            <button v-on:click.once="myFn">我是按钮</button> 
+            <!-- 如果想阻止元素的默认行为，可以使用.prevent修饰符 -->
+            <a href="//www.it666.com" v-on:click.prevent="myFn">我是a</a> 
+            
+            <!-- 如果想阻止事件冒泡，可以使用.stop修饰符 -->
+            <div class="a" @click='myFn'>
+                <!-- 阻止了a事件发生 -->
+                <div class="b" @click.stop='myFn1'>
+                    <!-- 由于b阻止了a事件，点击c时也不会发生a事件 -->
+                    <div class="c" @click='myFn2'></div>
+                </div>
+            </div>
+
+            <!-- 如果想变成事件捕获，事件捕获的意思就是先执行父级后执行本身，可以使用.capture修饰符 -->
+            <div class="a" @click.capture='myFn'>
+                <!-- 阻止了a事件发生 -->
+                <div class="b" @click='myFn1'>
+                    <!-- 由于b阻止了a事件，点击c时也不会发生a事件 -->
+                    <div class="c" @click='myFn2'></div>
+                </div>
+            </div>
+
+            <button @click="myFn4( 'leng',18,$event)">我是按钮</button>
+            <input type="text" @keyup="myFn()">
+            <!-- 按回车健执行 -->
+            <input type="text" @keyup.enter="myFn()">
+            <!-- Vue.config.keyCodes.f1=113  //f2用113代替 -->
+            <input type="text" @keyup.113="myFn()">
+            
+        </div>
+
+        <!-- 自定义指定 -->
+        <div class="" style="width: 50%;float: left;">
+            <h1>自定义指定</h1>
+            <p v-color>我是段落</p>
+            <input type="text" v-focus>
+            <p v-color1="'blue'">颜色传参</p>
+            <p v-color1="curColor">颜色传参</p>
+
+            
+        </div>
+
+    </div>
+
+    
+    <div id="app2" style="clear: both;">
+        <p v-color1="'pink'">颜色传参</p>
+
+
+    </div>
+
+    
+    
+    <script>
+        /**
+         * 1.什么是指令
+         * 
+         * 
+         * 指令v-model  实现数据的双向传递
+         * 指令v-once   让界面不要跟着数据变化而变化，只渲染一次
+         * 指令v-cloak  配合[v-cloak]:{display:none}默认先隐藏未渲染的界面
+         * 指令v-text   相当于innerText
+         * 指令v-html   相当于innerHTML
+         * 指令v-if     条件渲染：如果v-if取值是true就渲染元素，如果不是就不渲染元素
+         *              特点：如果条件不满足根本就不会创建这个元素
+         * 指令v-else   不能单独出现，只能配合v-if使用
+         *              v-if和v-else中间不能出现其他内容
+         * 指令v-show   跟v-if作用一样，差别是不满足条件时也会创建这个元素只是不显示，修改为满足条件后则会显示出来
+         *              不满足只会切换样式显示隐藏
+         * 指令v-for    相当于for循环，可以遍历数组，字符，数字，对象
+         * 指令v-bind   想要给“元素”绑定数据，我们可以使用{{}}，v-text，v-html
+         *              但是想要给“元素的属性”绑定数据，就必须使用v-bind
+         *              所以v-bind的作用是专门用于给“元素的属性”绑定数据
+         * 指令v-on     给元素绑定监听事件
+         *              格式： v-on:事件名称="回调函数名称"
+         *                     @事件名称="回调函数名称"
+         *              注意点： v-on绑定事件被触发后，会去Vue实例对象的methods中查找对应的回调函数
+         * v-on修饰符： 可以通过v-on修饰符来处理例如事件冒泡、事件捕获、阻止默认行为等
+         *    常见修饰符：
+         *              .once       只触发一次
+         *              .prevent    调用 event.preventDefault()，阻止默认行为
+         *              .self       只当事件是从侦听器绑定的元素本身触发时才触发
+         *              .stop       调用 event.stopPropagation()
+         *              .capture    添加事件侦听器时使用 capture模式，事件捕获，事件捕获的意思就是先执行父级后执行本身
+         *              按键修饰符监听特定的按键触发事件：
+         *                  可以监听当前事件是否是回车触发的，可以监听当前事件是否是ESC触发的
+         *      自定义按键修饰符：
+         *              Vue.config.keyCodes.f1=113  //f2用113代替
+         * 自定义全局指令
+         *              在Vue中除了可以使用Vue内置指令，还可以自定义指令
+         *              自定义全局指令语法：
+         *                  Vue.directive('自定义指令',{
+         *                      生命周期名称:function(el){
+         *                          指令业务逻辑代码
+         *                      }
+         *                  })
+         * 自定义局部指令
+         *              只能在自定义的那个Vue实例中使用
+         *              directives:{
+        *                   //key：指令名称
+        *                   //value:对象
+         *                  'color':{
+         *                      bind:function(el,obj){
+         *                          el.style.color = obj.value;
+         *                      }
+         *                  }
+         *              }
+        */
+
+        // 这里就是mvvm中的view model
+
+        // 自定义按键修饰符：
+        Vue.config.keyCodes.f2=113;
+
+        /**
+         * 自定义指令
+         * directive方法接收两个参数
+         * 第一个参数：指令名称
+         * 第二个参数：对象
+         * 注意点在自定义指令的时候，在指定指令名称的时候，不需要写v-
+         * 注意点：指令可以在不同生命周期元素阶段执行
+         *      钩子函数：
+         *      bind: 指令被绑定到元素上的时候执行
+         *      inserted: 绑定指令的元素被添加到父元素上的时候调用
+         *      
+         * 
+        */
+        Vue.directive('color',{
+            // 这里的el就是被绑定指令的那个元素
+            bind:function(el){
+                el.style.color='red'
+            },
+        });
+        Vue.directive('focus',{
+            // 这里的el就是被绑定指令的那个元素
+            inserted:function(el){
+                el.focus
+            },
+        });
+        Vue.directive('color1',{
+            // 这里的el就是被绑定指令的那个元素
+            bind:function(el,obj){
+                el.style.color=obj.value;
+            },
+        });
+
+        let vue = new Vue({
+            el :'#app',
+
+            // 这里就是mvvm中的model
+            data:{
+                name:'leng',
+                msg:'to leng',
+                msg1:'<span>leng</span>',
+
+                //v-if指令测试 
+                show:true,
+                hidden:false,
+                age:18,
+                score:65,
+
+                // v-for
+                list:['张三','李四','王五'],
+                obj:{
+                    name:'leng',
+                    age:18,
+                    class:'类'
+                },
+
+                // v-bind
+                classObj:{
+                    'size':true,
+                    'color':true,
+                    'active':false
+                },
+                styleObj:{
+                    'color':'red',
+                    'font-size':'20px',
+                },
+                styleObj1:{
+                    'background':'#000'
+                },
+
+                //自定义指令传参
+                curColor:'green' 
+
+            },
+            
+            // 专门用于存储监听事件回调函数
+            methods:{
+                myFn(){
+                    alert('aaaa')
+                },
+                myFn1(){
+                    alert('bbbb')
+                },
+                myFn2(){
+                    alert('cccc')
+                },
+                myFn3(){
+                    alert('dddd')
+                },
+                myFn4(name, age,e){
+                    console.log(name,age,this.score)
+                }
+            }
+        })
+
+        let vue2 = new Vue({
+            el :'#app2',
+            data:{
+
+            },
+            methods:{
+
+            },
+            /**
+             * 专门用于定义局部指令
+             * 比全局自定义指令后面多了一个s
+             */
+            
+            directives:{
+                'color1':{
+                    // 这里的el就是被绑定指令的那个元素
+                    bind:function(el,obj){
+                        el.style.color=obj.value;
+                    },
+                }
+            }
+        })
+    </script>
+</body>
+</html>

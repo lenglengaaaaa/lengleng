@@ -1,0 +1,171 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            list-style:none;
+            text-decoration:none;
+        }
+        body{
+            width: 1000px;
+            height: auto;
+            margin-top:100px;
+        }
+        .tab-box{
+            width: 100px;
+            height: auto;
+            float:right;
+        }
+        .tab1{
+            text-align: center;
+            height: 50px;
+            position:relative;
+        }
+        .tab1 a{
+            line-height: 50px;
+            font-size: 20px;
+            color:#000;
+        }
+        .tab1 a:hover{
+            color:#f00;
+        }
+        .tab2 {
+            display:none;
+        }
+        .tab2 ul{
+            width:200px;
+            height:auto;
+            background:rgba(0,0,0,.7);
+            position: absolute;
+            top:50%;
+            left:-200px;
+            transform:translateY(-50%);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        .tab2 li{
+            padding: 0 10px;
+            cursor: pointer;
+        }
+        .content{
+            width: calc(1000px - 100px - 200px);
+            text-align:center;
+        }
+    </style>
+</head>
+<body>
+    <!-- 一级导航 -->
+    <div class="tab-box">
+        <div class="tab1 tab1-1">
+            <a href="javascript:;">html</a>
+            <!-- 二级导航 -->
+            <div class="tab2">
+                <ul>
+                    <li>html5</li>
+                    <li>css</li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab1 tab1-2">
+            <a href="javascript:;">js</a>
+            <!-- 二级导航 -->
+            <div class="tab2">
+                <ul>
+                    <li>数组</li>
+                    <li>字符串</li>
+                    <li>正则表达式</li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab1 tab1-3">
+            <a href="javascript:;">jq</a>
+            <!-- 二级导航 -->
+            <div class="tab2">
+                <ul>
+                    <li>jq</li>
+                </ul>
+            </div>
+        </div>
+        <div class="tab1 tab1-4">
+            <a href="javascript:;">vue</a>
+            <!-- 二级导航 -->
+            <div class="tab2">
+                <ul>
+                    <li>router</li>
+                    <li>vuex</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- 正文 -->
+    <div class="content">
+    </div>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+        // 一级导航
+        $('.tab1 a').click(function(){
+            var idx=$(this).parents('.tab1').index();
+            // 点击的这个a标签的兄弟标签tab2显示出来
+            $(this).siblings('.tab2').show();
+            // a标签要跳到上一级父节点后，再跳到父节点的子节点tab2才会有tab2点击切换
+            $(this).parents('.tab1').siblings('.tab1').children('.tab2').hide();
+        })
+
+        // 获取相应的内容
+        console.log($('.tab2 li').length)
+        var cont=[
+            {
+                'name':'html5',
+                'con':'html5的内容'
+            },
+            {
+                'name':'css',
+                'con':'css的内容'
+            },
+            {
+                'name':'数组',
+                'con':'数组的内容'
+            },
+            {
+                'name':'字符串',
+                'con':'字符串的内容'
+            },
+            {
+                'name':'正则表达式',
+                'con':'正则表达式的内容'
+            },
+            {
+                'name':'jq',
+                'con':'jq的内容'
+            },
+            {
+                'name':'router',
+                'con':'router的内容'
+            },
+            {
+                'name':'vuex',
+                'con':'vuex的内容'
+            }
+        ]
+        // 二级导航
+        $('.tab2 li').click(function(){
+            // 获取二级导航.tab2 li的内容
+            var text=$(this).text();
+            // 查找数组里面与.tab2 li的内容相同的值，一般开发文档会告诉你哪个属性对应这个.tab2 li的内容
+            for(var i=0;i<cont.length;i++){
+                if(cont[i].name==text){
+                    // text与数组里面的值一样后，再把cont[i]里面的另一个字段给到content这个div
+                    $('.content').html(cont[i].con)
+                }
+            }
+            console.log(text)
+        })
+    </script>
+</body>
+</html>
